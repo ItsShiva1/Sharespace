@@ -66,6 +66,14 @@ This project uses Supabase for database and storage. To set up your backend:
     - Add a policy to allow `INSERT` for authenticated users.
 3.  **Environment Variables**: Update `src/app/services/supabase.client.ts` with your Supabase `URL` and `Anon Key`.
 
-## Unit Testing
 
-...
+## Deployment
+
+### Deploying to Vercel
+
+1.  **Connect to GitHub**: Go to [vercel.com/new](https://vercel.com/new) and import this repository.
+2.  **Framework Preset**: Select **Angular**.
+3.  **Build Settings**: Leave as default (`pnpm build`).
+4.  **Deployment**: Click **Deploy**.
+
+Vercel will automatically handle your Angular builds and provide you with a production URL!
