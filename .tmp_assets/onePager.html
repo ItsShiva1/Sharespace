@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShareSpace — Product Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #08080e;
+  --ink2: #14141f;
+  --ink3: #1e1e2d;
+  --ink4: #2b2b40;
+  --wire: #32324a;
+  --muted: #5a5a7a;
+  --dim: #8888a8;
+  --paper: #e8e8f2;
+  --white: #f4f4fc;
+  --v: #7b5ea7;        /* violet */
+  --vo: #9b7cc7;
+  --teal: #2ec4a4;
+  --amber: #f0a500;
+  --coral: #e8545a;
+  --ice: #5bc8e8;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* big background letters */
+.hero-bg-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(140px, 22vw, 340px);
+  letter-spacing: -4px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(123,94,167,0.12);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.hero-inner {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--v);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 32px; height: 1px;
+  background: var(--v);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 8vw, 110px);
+  line-height: 0.92;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--v);
+}
+.hero h1 .line2 { color: var(--teal); }
+
+.hero-desc {
+  font-size: 17px;
+  color: var(--dim);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 36px;
+}
+
+.hero-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 40px;
+}
+.tag {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--wire);
+  color: var(--dim);
+  letter-spacing: 0.5px;
+}
+.tag.t-v  { border-color: rgba(123,94,167,0.5); color: var(--vo); background: rgba(123,94,167,0.08); }
+.tag.t-t  { border-color: rgba(46,196,164,0.5); color: var(--teal); background: rgba(46,196,164,0.08); }
+.tag.t-a  { border-color: rgba(240,165,0,0.5); color: var(--amber); background: rgba(240,165,0,0.08); }
+.tag.t-c  { border-color: rgba(232,84,90,0.5); color: var(--coral); background: rgba(232,84,90,0.08); }
+
+.hero-personas {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.persona-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--dim);
+  transition: border-color 0.2s, color 0.2s;
+}
+.persona-chip:hover { border-color: var(--v); color: var(--paper); }
+.persona-chip .icon { font-size: 16px; }
+
+/* hero right: terminal mock */
+.hero-terminal {
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+}
+.terminal-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  background: var(--ink3);
+  border-bottom: 1px solid var(--wire);
+}
+.terminal-dots { display: flex; gap: 6px; }
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot.r { background: var(--coral); }
+.dot.y { background: var(--amber); }
+.dot.g { background: var(--teal); }
+.terminal-title { flex: 1; text-align: center; font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.terminal-body { padding: 20px; font-family: var(--font-mono); font-size: 12px; line-height: 1.8; }
+.t-comment { color: var(--muted); }
+.t-key { color: var(--ice); }
+.t-val { color: var(--teal); }
+.t-str { color: var(--amber); }
+.t-num { color: var(--coral); }
+.t-acc { color: var(--vo); }
+.t-line { display: block; }
+.t-indent { padding-left: 20px; }
+.t-indent2 { padding-left: 40px; }
+
+/* ─────────────────────────────────────────
+   SECTION HEADERS
+───────────────────────────────────────── */
+.section { padding: 80px 0; position: relative; z-index: 1; }
+.section + .section { border-top: 1px solid var(--wire); }
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--v);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-eyebrow::before { content: '//'; color: var(--muted); }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: 0.95;
+  letter-spacing: 1px;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.section-title .hl { color: var(--v); }
+.section-title .hl-t { color: var(--teal); }
+.section-title .hl-a { color: var(--amber); }
+
+.section-sub {
+  font-size: 15px;
+  color: var(--dim);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 52px;
+}
+
+/* ─────────────────────────────────────────
+   FEATURES GRID
+───────────────────────────────────────── */
+.feature-categories {
+  display: flex; flex-direction: column; gap: 52px;
+}
+
+.feat-category-label {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px;
+}
+.feat-cat-icon {
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.feat-cat-icon.cat-student { background: rgba(91,200,232,0.12); }
+.feat-cat-icon.cat-dev     { background: rgba(123,94,167,0.15); }
+.feat-cat-icon.cat-office  { background: rgba(240,165,0,0.12); }
+.feat-cat-icon.cat-bank    { background: rgba(232,84,90,0.12); }
+.feat-cat-icon.cat-univ    { background: rgba(46,196,164,0.12); }
+
+.feat-cat-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: var(--white);
+}
+.feat-cat-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  padding: 3px 8px;
+  border: 1px solid var(--wire);
+  border-radius: 4px;
+}
+
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2px;
+}
+
+.feat-card {
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-radius: 0;
+  padding: 20px;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.feat-grid .feat-card:first-child { border-radius: 12px 0 0 0; }
+.feat-grid .feat-card:last-child { border-radius: 0 0 12px 0; }
+
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--v), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.feat-card:hover::before { opacity: 1; }
+.feat-card:hover { background: var(--ink3); border-color: rgba(123,94,167,0.3); z-index: 2; }
+
+.feat-card-icon { font-size: 22px; margin-bottom: 10px; }
+.feat-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.feat-card-desc {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+.feat-card-badge {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.badge-prime { background: rgba(123,94,167,0.2); color: var(--vo); border: 1px solid rgba(123,94,167,0.3); }
+.badge-team  { background: rgba(240,165,0,0.15); color: var(--amber); border: 1px solid rgba(240,165,0,0.3); }
+.badge-free  { background: rgba(46,196,164,0.12); color: var(--teal); border: 1px solid rgba(46,196,164,0.3); }
+
+/* ─────────────────────────────────────────
+   SUBSCRIPTIONS
+───────────────────────────────────────── */
+.billing-toggle {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 48px;
+}
+.billing-opt {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dim);
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.billing-opt.active { color: var(--white); background: var(--ink3); border-color: var(--wire); }
+.billing-save {
+  font-size: 11px;
+  background: rgba(46,196,164,0.15);
+  color: var(--teal);
+  border: 1px solid rgba(46,196,164,0.3);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--wire);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 52px;
+}
+
+.plan-card {
+  padding: 36px 32px;
+  background: var(--ink2);
+  border-right: 1px solid var(--wire);
+  position: relative;
+  transition: background 0.2s;
+}
+.plan-card:last-child { border-right: none; }
+.plan-card.featured {
+  background: var(--ink3);
+  border-top: 3px solid var(--v);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -1px; right: 28px;
+  background: var(--v);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 0 0 6px 6px;
+}
+
+.plan-icon { font-size: 28px; margin-bottom: 16px; }
+.plan-name {
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 1px;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.plan-tagline {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+.plan-price-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.plan-price {
+  font-family: var(--font-display);
+  font-size: 52px;
+  line-height: 1;
+  color: var(--white);
+}
+.plan-price sup {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 500;
+  vertical-align: super;
+  line-height: 1;
+}
+.plan-price-period {
+  font-size: 12px;
+  color: var(--muted);
+  padding-bottom: 6px;
+}
+.plan-yearly-note {
+  font-size: 11px;
+  color: var(--teal);
+  font-family: var(--font-mono);
+  margin-bottom: 28px;
+  height: 18px;
+}
+
+.plan-cta {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  margin-bottom: 28px;
+  font-family: var(--font-body);
+}
+.plan-cta.cta-free { background: var(--ink4); color: var(--dim); border: 1px solid var(--wire); }
+.plan-cta.cta-free:hover { background: var(--ink3); color: var(--paper); }
+.plan-cta.cta-prime { background: var(--v); color: #fff; box-shadow: 0 4px 20px rgba(123,94,167,0.4); }
+.plan-cta.cta-prime:hover { background: var(--vo); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(123,94,167,0.5); }
+.plan-cta.cta-team { background: transparent; color: var(--amber); border: 1px solid rgba(240,165,0,0.4); }
+.plan-cta.cta-team:hover { background: rgba(240,165,0,0.08); }
+
+.plan-features { display: flex; flex-direction: column; gap: 10px; }
+.plan-feat-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 12.5px;
+  color: var(--dim);
+}
+.plan-feat-row.included { color: var(--paper); }
+.plan-feat-row.highlighted { color: var(--white); font-weight: 500; }
+.feat-check { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.feat-check.yes { color: var(--teal); }
+.feat-check.no  { color: var(--wire); }
+.feat-check.star { color: var(--amber); }
+
+/* comparison table */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.compare-table th {
+  text-align: left;
+  padding: 14px 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  color: var(--white);
+  background: var(--ink3);
+  border-bottom: 1px solid var(--wire);
+}
+.compare-table th:not(:first-child) { text-align: center; }
+.compare-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid rgba(50,50,74,0.6);
+  color: var(--dim);
+  vertical-align: middle;
+}
+.compare-table td:not(:first-child) { text-align: center; }
+.compare-table tr:hover td { background: rgba(123,94,167,0.04); }
+.compare-table .cat-row td {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--ink);
+  padding: 10px 16px 6px;
+  border-bottom: 1px solid var(--wire);
+}
+.compare-table .check-y { color: var(--teal); font-size: 16px; }
+.compare-table .check-n { color: var(--wire); font-size: 16px; }
+.compare-table .check-p { color: var(--vo); font-size: 16px; }
+.compare-table td.feature-name { color: var(--paper); }
+.compare-table .note { font-size: 11px; color: var(--muted); }
+
+/* ─────────────────────────────────────────
+   TECH STACK
+───────────────────────────────────────── */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.stack-card {
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  padding: 22px 24px;
+  display: flex; gap: 18px; align-items: flex-start;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.stack-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--v), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.stack-card:hover { border-color: rgba(123,94,167,0.35); background: var(--ink3); }
+.stack-card:hover::after { opacity: 1; }
+
+.stack-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.si-ng    { background: rgba(221,0,49,0.15); color: #dd0031; }
+.si-ts    { background: rgba(49,120,198,0.15); color: #3178c6; }
+.si-scss  { background: rgba(204,102,153,0.15); color: #cc6699; }
+.si-rx    { background: rgba(178,20,151,0.15); color: #b21497; }
+.si-stripe{ background: rgba(99,91,255,0.15); color: #635bff; }
+.si-mat   { background: rgba(221,0,49,0.12); color: #dd0031; }
+.si-pwa   { background: rgba(91,200,232,0.15); color: var(--ice); }
+.si-uuid  { background: rgba(123,94,167,0.15); color: var(--vo); }
+
+.stack-info { flex: 1; }
+.stack-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+.stack-version {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  border: 1px solid var(--wire);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 6px;
+}
+.stack-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.stack-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.stack-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--ink4);
+  color: var(--muted);
+  border: 1px solid var(--wire);
+}
+
+/* ─────────────────────────────────────────
+   ARCHITECTURE DIAGRAM
+───────────────────────────────────────── */
+.arch-diagram {
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-radius: 14px;
+  padding: 36px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  overflow-x: auto;
+}
+.arch-row {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 4px;
+}
+.arch-box {
+  padding: 8px 16px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid;
+}
+.ab-blue  { background: rgba(49,120,198,0.12); border-color: rgba(49,120,198,0.3); color: #5a9fd4; }
+.ab-v     { background: rgba(123,94,167,0.15); border-color: rgba(123,94,167,0.3); color: var(--vo); }
+.ab-t     { background: rgba(46,196,164,0.1);  border-color: rgba(46,196,164,0.3); color: var(--teal); }
+.ab-a     { background: rgba(240,165,0,0.1);   border-color: rgba(240,165,0,0.3);  color: var(--amber); }
+.ab-c     { background: rgba(232,84,90,0.1);   border-color: rgba(232,84,90,0.3);  color: var(--coral); }
+.ab-grey  { background: var(--ink3);           border-color: var(--wire);           color: var(--dim); }
+
+.arch-arrow { color: var(--muted); margin: 0 6px; }
+.arch-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.arch-section-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 20px 0 10px;
+}
+.arch-line {
+  border-top: 1px dashed var(--wire);
+  margin: 16px 0;
+}
+
+/* ─────────────────────────────────────────
+   ROUTES TABLE
+───────────────────────────────────────── */
+.routes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 10px;
+}
+.route-row {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px;
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+.route-row:hover { border-color: rgba(123,94,167,0.3); background: var(--ink3); }
+.route-path {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--teal);
+  white-space: nowrap;
+  min-width: 160px;
+  flex-shrink: 0;
+}
+.route-info { flex: 1; }
+.route-component { font-size: 12px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.route-desc { font-size: 11px; color: var(--muted); }
+.route-guard {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(123,94,167,0.3);
+  color: var(--vo);
+  background: rgba(123,94,167,0.08);
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* ─────────────────────────────────────────
+   STATS STRIP
+───────────────────────────────────────── */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--wire);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 80px;
+}
+.stat-cell {
+  padding: 32px 24px;
+  text-align: center;
+  border-right: 1px solid var(--wire);
+  background: var(--ink2);
+  transition: background 0.2s;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell:hover { background: var(--ink3); }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 1;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.stat-num .accent { color: var(--v); }
+.stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.3px; }
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--wire);
+  padding: 40px 0;
+  position: relative; z-index: 1;
+}
+.footer-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 20px;
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: var(--white);
+}
+.footer-logo span { color: var(--v); }
+.footer-meta { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.footer-links a:hover { color: var(--white); }
+
+/* ─────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.hero-inner { animation: fadeUp 0.8s ease both; }
+.stats-strip { animation: fadeIn 1s ease 0.2s both; }
+
+/* scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-terminal { display: none; }
+  .plans-grid { grid-template-columns: 1fr; }
+  .plan-card { border-right: none; border-bottom: 1px solid var(--wire); }
+  .stats-strip { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .wrap { padding: 0 20px; }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .section-title { font-size: 38px; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .routes-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─────────────────────── HERO ─────────────────────── -->
+<section class="hero">
+  <div class="hero-bg-text">SHARESPACE</div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-label">Product One-Pager · v1.0 · Angular 21</div>
+        <h1>SHARE<br><em>CODE</em><br><span class="line2">INSTANTLY</span></h1>
+        <p class="hero-desc">A full-featured platform for sharing code snippets, documents, and files — with real-time collaboration, history management, and tier-based access — built on Angular 21 Signals.</p>
+        <div class="hero-tags">
+          <span class="tag t-v">Angular 21</span>
+          <span class="tag t-v">Standalone</span>
+          <span class="tag t-v">Signals</span>
+          <span class="tag t-t">TypeScript 5.6</span>
+          <span class="tag t-t">SCSS</span>
+          <span class="tag t-a">Stripe Payments</span>
+          <span class="tag t-c">E2E Encryption</span>
+          <span class="tag">PWA</span>
+          <span class="tag">Lazy Loading</span>
+          <span class="tag">Zoneless-ready</span>
+        </div>
+        <div class="hero-personas">
+          <div class="persona-chip"><span class="icon">🎓</span> Students</div>
+          <div class="persona-chip"><span class="icon">💻</span> Developers</div>
+          <div class="persona-chip"><span class="icon">🏢</span> Office Staff</div>
+          <div class="persona-chip"><span class="icon">🏦</span> Banking & Finance</div>
+          <div class="persona-chip"><span class="icon">👥</span> Teams</div>
+        </div>
+      </div>
+
+      <!-- Terminal mock -->
+      <div class="hero-terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <div class="terminal-title">sharespace.io/s/python-code-tested</div>
+        </div>
+        <div class="terminal-body">
+          <span class="t-line t-comment">// ShareSpace Snippet · Python · 3 files</span>
+          <span class="t-line">&nbsp;</span>
+          <span class="t-line"><span class="t-key">snippet</span> = {</span>
+          <span class="t-line t-indent"><span class="t-key">id</span>: <span class="t-str">"f4a2b9c1"</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">slug</span>: <span class="t-str">"python-code-tested"</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">title</span>: <span class="t-str">"ML Pipeline"</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">lang</span>: <span class="t-str">"python"</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">tabs</span>: [</span>
+          <span class="t-line t-indent2"><span class="t-str">"main.py"</span>, <span class="t-str">"utils.py"</span>, <span class="t-str">"README.md"</span></span>
+          <span class="t-line t-indent">],</span>
+          <span class="t-line t-indent"><span class="t-key">views</span>: <span class="t-num">1_842</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">plan</span>: <span class="t-acc">"prime"</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">expiresAt</span>: <span class="t-acc">null</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">encrypted</span>: <span class="t-acc">false</span>,</span>
+          <span class="t-line t-indent"><span class="t-key">shareUrl</span>: <span class="t-str">"sharespace.io/s/python-code-tested"</span></span>
+          <span class="t-line">}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────── STATS ─────────────────────── -->
+<div class="wrap">
+  <div class="stats-strip reveal">
+    <div class="stat-cell">
+      <div class="stat-num"><span class="accent">45</span>+</div>
+      <div class="stat-label">Total Features</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num"><span class="accent">18</span></div>
+      <div class="stat-label">Components</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num"><span class="accent">7</span></div>
+      <div class="stat-label">Services</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num"><span class="accent">3</span></div>
+      <div class="stat-label">Plan Tiers</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num"><span class="accent">5</span></div>
+      <div class="stat-label">User Personas</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────── FEATURES ─────────────────────── -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-eyebrow">features</div>
+    <h2 class="section-title">EVERY<br><span class="hl">CAPABILITY</span></h2>
+    <p class="section-sub">45+ features grouped by user persona. Each card shows which subscription tier unlocks it.</p>
+
+    <div class="feature-categories">
+
+      <!-- CORE EDITOR -->
+      <div class="reveal">
+        <div class="feat-category-label">
+          <div class="feat-cat-icon cat-dev">✏️</div>
+          <div>
+            <div class="feat-cat-title">CORE EDITOR</div>
+          </div>
+          <div class="feat-cat-count">12 features</div>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">📑</div><div class="feat-card-name">Multi-File Tabs</div><div class="feat-card-desc">Add, rename, switch, and remove unlimited file tabs per snippet</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🌐</div><div class="feat-card-name">18 Languages</div><div class="feat-card-desc">JS, TS, HTML, CSS, Python, JSON, Markdown, SQL, Bash, Rust, Go, Java, C++, PHP, Ruby, Swift, Kotlin</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🔢</div><div class="feat-card-name">Line Numbers</div><div class="feat-card-desc">Toggleable line numbers with active-line highlight and scroll sync</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">⌨️</div><div class="feat-card-name">Smart Keyboard</div><div class="feat-card-desc">Tab → real spaces, auto-closing brackets, Ctrl+/ comment toggle</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">✨</div><div class="feat-card-name">Format / Beautify</div><div class="feat-card-desc">JSON pretty-print, HTML re-indent, configurable tab size 2/4</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">👁️</div><div class="feat-card-name">Live Preview</div><div class="feat-card-desc">Split pane — renders HTML, runs JS with console output, previews Markdown and CSS</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📊</div><div class="feat-card-name">Diff Viewer</div><div class="feat-card-desc">Side-by-side or inline diff of any two versions, character-level highlighting</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🔁</div><div class="feat-card-name">Version History</div><div class="feat-card-desc">Git-style versions with custom messages, restore to any point</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">▶️</div><div class="feat-card-name">Code Execution</div><div class="feat-card-desc">Run JS, Python (Pyodide), SQL in-browser with stdout/stderr panels</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🔍</div><div class="feat-card-name">Regex Tester</div><div class="feat-card-desc">Live match highlighting, capture group table, flag selector, pattern library</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🛠️</div><div class="feat-card-name">JSON/YAML/CSV Tools</div><div class="feat-card-desc">Format, validate, convert between formats, CSV to sortable table</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📸</div><div class="feat-card-name">Code Screenshot</div><div class="feat-card-desc">Export editor as PNG with custom themes, window chrome, background, padding</div></div>
+        </div>
+      </div>
+
+      <!-- STUDENT -->
+      <div class="reveal">
+        <div class="feat-category-label">
+          <div class="feat-cat-icon cat-student">🎓</div>
+          <div><div class="feat-cat-title">STUDENTS</div></div>
+          <div class="feat-cat-count">6 features</div>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🏫</div><div class="feat-card-name">Classroom Mode</div><div class="feat-card-desc">Teacher creates a room with join code; students submit snippets; mark as reviewed / needs work</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📋</div><div class="feat-card-name">Assignment Templates</div><div class="feat-card-desc">Starter code with editable regions, fork-to-start, submission deadline locking</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">💬</div><div class="feat-card-name">Peer Code Review</div><div class="feat-card-desc">Inline line comments, threaded replies, resolved/open counts, review summary</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">👥</div><div class="feat-card-name">Study Groups</div><div class="feat-card-desc">Named group with invite links, shared snippet feed, pinned snippets</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🃏</div><div class="feat-card-name">Flashcard Mode</div><div class="feat-card-desc">Turn snippets into spaced-repetition flashcard decks; export or share deck link</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">❓</div><div class="feat-card-name">Code Quiz Builder</div><div class="feat-card-desc">Multiple-choice, fill-in-blank, spot-the-bug; auto-grade and share quiz link</div></div>
+        </div>
+      </div>
+
+      <!-- DEVELOPERS -->
+      <div class="reveal">
+        <div class="feat-category-label">
+          <div class="feat-cat-icon cat-dev">💻</div>
+          <div><div class="feat-cat-title">DEVELOPERS</div></div>
+          <div class="feat-cat-count">6 features</div>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🌐</div><div class="feat-card-name">API Playground</div><div class="feat-card-desc">Built-in HTTP client — GET/POST/PUT/PATCH/DELETE, headers, body, pretty response, Postman export</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">📦</div><div class="feat-card-name">Snippet Collections</div><div class="feat-card-desc">Organize into folders/tags, share as collection link /c/my-utils, embeddable widget</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🔗</div><div class="feat-card-name">Custom Slug</div><div class="feat-card-desc">Reserve vanity URLs like sharespace.io/s/python-code-tested; real-time availability check</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🍴</div><div class="feat-card-name">Snippet Forking</div><div class="feat-card-desc">Fork any public snippet; fork chain tracked; diff fork vs original</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">⌨️</div><div class="feat-card-name">CLI Tool</div><div class="feat-card-desc">npm install -g sharespace-cli · push, pull, open commands · pipe support</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">⬆️</div><div class="feat-card-name">GitHub Gist Import</div><div class="feat-card-desc">Paste Gist URL → imports all files preserving names and languages, sync from Gist</div></div>
+        </div>
+      </div>
+
+      <!-- OFFICE STAFF -->
+      <div class="reveal">
+        <div class="feat-category-label">
+          <div class="feat-cat-icon cat-office">🏢</div>
+          <div><div class="feat-cat-title">OFFICE STAFF</div></div>
+          <div class="feat-cat-count">6 features</div>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">📝</div><div class="feat-card-name">Rich Text Editor</div><div class="feat-card-desc">WYSIWYG mode — bold/italic/headings, tables, checklists, image insertion, export PDF/DOCX</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📄</div><div class="feat-card-name">Templates Library</div><div class="feat-card-desc">Meeting Notes, Bug Report, SOPs, Invoice, Expense Report — with template variables</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🗨️</div><div class="feat-card-name">Commenting</div><div class="feat-card-desc">Inline comments, threaded replies, @mention, resolve, annotated PDF export</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">📅</div><div class="feat-card-name">Meeting Notes Mode</div><div class="feat-card-desc">Structured template: agenda, discussion, action items with assignees and due dates</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🎞️</div><div class="feat-card-name">Presentation Mode</div><div class="feat-card-desc">--- splits into slides, full-screen slideshow, presenter notes, PDF export per slide</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📊</div><div class="feat-card-name">Form Builder</div><div class="feat-card-desc">Simple data-collection forms, shareable link, responses in table, CSV export</div></div>
+        </div>
+      </div>
+
+      <!-- BANKING/ENTERPRISE -->
+      <div class="reveal">
+        <div class="feat-category-label">
+          <div class="feat-cat-icon cat-bank">🏦</div>
+          <div><div class="feat-cat-title">BANKING & ENTERPRISE</div></div>
+          <div class="feat-cat-count">7 features</div>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🔒</div><div class="feat-card-name">E2E Encryption</div><div class="feat-card-desc">AES-256-GCM browser-side encryption before storage; passphrase-derived key; audit logged</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">💧</div><div class="feat-card-name">Watermarking</div><div class="feat-card-desc">Username + timestamp + CONFIDENTIAL overlay; invisible steganographic option for images</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📋</div><div class="feat-card-name">Audit Log</div><div class="feat-card-desc">Full trail: created, viewed, edited, shared, downloaded — with actor, IP, timestamp; CSV export</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">⏱️</div><div class="feat-card-name">Secure Link Expiry</div><div class="feat-card-desc">One-time view, auto-destruct, IP allowlist, geo-restriction, screenshot prevention</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">✍️</div><div class="feat-card-name">Digital Signature</div><div class="feat-card-desc">SHA-256 document hash + identity; signature verifiable by recipient on open</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📜</div><div class="feat-card-name">Compliance Templates</div><div class="feat-card-desc">GDPR DPA, NDA, Data Breach Report, Change Request — with mandatory field enforcement</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🛡️</div><div class="feat-card-name">2FA on Access</div><div class="feat-card-desc">OTP via recipient email; 10-minute OTP expiry; time-limited 30-min session; sender can burn link</div></div>
+        </div>
+      </div>
+
+      <!-- UNIVERSAL -->
+      <div class="reveal">
+        <div class="feat-category-label">
+          <div class="feat-cat-icon cat-univ">🌐</div>
+          <div><div class="feat-cat-title">UNIVERSAL</div></div>
+          <div class="feat-cat-count">14 features</div>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">📂</div><div class="feat-card-name">Document Upload</div><div class="feat-card-desc">Drag & drop, multi-file, progress bar, preview for image/PDF/text/video/audio</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">⬆️</div><div class="feat-card-name">Sharing Suite</div><div class="feat-card-desc">Share link, embed iframe, raw URL, QR code, per-file document links</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">📱</div><div class="feat-card-name">PWA / Offline</div><div class="feat-card-desc">Service worker, works offline, background sync, install as app on any device</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🎨</div><div class="feat-card-name">Custom Themes</div><div class="feat-card-desc">9 built-in themes + custom builder; synced to account; auto light/dark mode</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">📈</div><div class="feat-card-name">Analytics Dashboard</div><div class="feat-card-desc">Per-snippet views, unique visitors, daily chart, referrers, countries, embed stats</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">⌨️</div><div class="feat-card-name">Keyboard Shortcuts</div><div class="feat-card-desc">Ctrl+S save, Ctrl+N new, Ctrl+Shift+P command palette, F11 zen mode + 15 more</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🔎</div><div class="feat-card-name">Command Palette</div><div class="feat-card-desc">Spotlight-style fuzzy search across commands, recent snippets, and history</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🧘</div><div class="feat-card-name">Zen / Focus Mode</div><div class="feat-card-desc">Hides all UI, typewriter mode, ambient sounds (rain, café, forest)</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🔔</div><div class="feat-card-name">Notification Center</div><div class="feat-card-desc">View milestones, plan renewals, group activity, comment alerts</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🏷️</div><div class="feat-card-name">Tags & Labels</div><div class="feat-card-desc">Custom colored tags, tag cloud, filter history by tag, bulk tagging</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">🌍</div><div class="feat-card-name">Multi-Language UI</div><div class="feat-card-desc">EN, Tamil, Hindi, French, German, Japanese, Arabic (RTL support)</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-free">FREE</span><div class="feat-card-icon">📤</div><div class="feat-card-name">Export Options</div><div class="feat-card-desc">ZIP all files, PDF formatted, Markdown, single file; print-friendly view</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-team">TEAM</span><div class="feat-card-icon">⚡</div><div class="feat-card-name">Live Collaboration</div><div class="feat-card-desc">CRDT real-time multi-cursor editing, presence indicators, scoped chat, permission levels</div></div>
+          <div class="feat-card"><span class="feat-card-badge badge-prime">PRIME</span><div class="feat-card-icon">🔒</div><div class="feat-card-name">History Retention</div><div class="feat-card-desc">Free: 6-day auto-expiry. Prime: permanent. Pin entries, upgrade removes all expiries</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────── SUBSCRIPTIONS ─────────────────────── -->
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="section-eyebrow">subscriptions</div>
+    <h2 class="section-title">SIMPLE<br><span class="hl-t">PRICING</span></h2>
+    <p class="section-sub">One plan for individuals, one for power users, one for teams. Pay monthly or save with yearly billing.</p>
+
+    <div class="billing-toggle reveal">
+      <span class="billing-opt active">Monthly</span>
+      <span class="billing-opt">Yearly</span>
+      <span class="billing-save">Save up to 17%</span>
+    </div>
+
+    <div class="plans-grid reveal">
+
+      <!-- FREE -->
+      <div class="plan-card">
+        <div class="plan-icon">⬡</div>
+        <div class="plan-name">FREE</div>
+        <div class="plan-tagline">For casual sharers and first-time users</div>
+        <div class="plan-price-row">
+          <div class="plan-price"><sup>$</sup>0</div>
+          <div class="plan-price-period">/ month</div>
+        </div>
+        <div class="plan-yearly-note"></div>
+        <button class="plan-cta cta-free">Current Plan</button>
+        <div class="plan-features">
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Unlimited snippets</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> 18 language support</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Live HTML/JS/MD preview</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Document upload (5 MB / 5 files)</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Shareable links + embed</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> PWA offline mode</div>
+          <div class="plan-feat-row"><span class="feat-check no">—</span> <span style="color:var(--muted)">History expires after 6 days</span></div>
+          <div class="plan-feat-row"><span class="feat-check no">—</span> <span style="color:var(--muted)">No custom slug</span></div>
+          <div class="plan-feat-row"><span class="feat-check no">—</span> <span style="color:var(--muted)">No analytics</span></div>
+          <div class="plan-feat-row"><span class="feat-check no">—</span> <span style="color:var(--muted)">No encryption</span></div>
+        </div>
+      </div>
+
+      <!-- PRIME -->
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-icon">⬟</div>
+        <div class="plan-name">PRIME</div>
+        <div class="plan-tagline">For developers, students, and professionals</div>
+        <div class="plan-price-row">
+          <div class="plan-price"><sup>$</sup>7</div>
+          <div class="plan-price-period">/ month</div>
+        </div>
+        <div class="plan-yearly-note">$70/yr — save $14</div>
+        <button class="plan-cta cta-prime">Upgrade to Prime</button>
+        <div class="plan-features">
+          <div class="plan-feat-row highlighted"><span class="feat-check yes">✓</span> Everything in Free</div>
+          <div class="plan-feat-row highlighted"><span class="feat-check yes">✓</span> Permanent history — never expires</div>
+          <div class="plan-feat-row highlighted"><span class="feat-check yes">✓</span> Custom vanity slug URLs</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> 50 MB uploads, unlimited files</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Version history (unlimited)</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Code execution sandbox</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Analytics dashboard</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> E2E encryption + digital signature</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Audit log (90 days)</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> API access + CLI tool</div>
+        </div>
+      </div>
+
+      <!-- TEAM -->
+      <div class="plan-card">
+        <div class="plan-icon">⬢</div>
+        <div class="plan-name">TEAM</div>
+        <div class="plan-tagline">For squads, classrooms, and enterprise</div>
+        <div class="plan-price-row">
+          <div class="plan-price"><sup>$</sup>19</div>
+          <div class="plan-price-period">/ month</div>
+        </div>
+        <div class="plan-yearly-note">$190/yr — save $38</div>
+        <button class="plan-cta cta-team">Start Team Trial</button>
+        <div class="plan-features">
+          <div class="plan-feat-row highlighted"><span class="feat-check yes">✓</span> Everything in Prime</div>
+          <div class="plan-feat-row highlighted"><span class="feat-check star">★</span> Live collaboration (10 members)</div>
+          <div class="plan-feat-row highlighted"><span class="feat-check star">★</span> Custom domain support</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> 200 MB uploads per file</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Audit log (1 year)</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Geo-restriction on links</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Team templates library</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Classroom mode (teacher)</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Admin dashboard</div>
+          <div class="plan-feat-row included"><span class="feat-check yes">✓</span> Priority support + SLA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <div class="reveal" style="overflow-x:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:38%;">Feature</th>
+            <th style="width:20%;">Free</th>
+            <th style="width:20%;">Prime</th>
+            <th style="width:20%;">Team</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="cat-row"><td colspan="4">History & Storage</td></tr>
+          <tr><td class="feature-name">History retention</td><td>6 days</td><td>Forever</td><td>Forever</td></tr>
+          <tr><td class="feature-name">Upload size limit</td><td>5 MB</td><td>50 MB</td><td>200 MB</td></tr>
+          <tr><td class="feature-name">Max upload files</td><td>5</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><td class="feature-name">Version history</td><td class="check-n">—</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><td class="feature-name">Pin history entries</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+
+          <tr class="cat-row"><td colspan="4">Sharing & URLs</td></tr>
+          <tr><td class="feature-name">Custom vanity slug</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Password-protected links</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">One-time view links</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">2FA on access</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Geo-restriction</td><td class="check-n">—</td><td class="check-n">—</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Custom domain</td><td class="check-n">—</td><td class="check-n">—</td><td class="check-y">✓</td></tr>
+
+          <tr class="cat-row"><td colspan="4">Editor & Tools</td></tr>
+          <tr><td class="feature-name">Code execution sandbox</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">API playground</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Diff viewer</td><td class="check-y">✓</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Code screenshot export</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">CLI tool access</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">API access</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+
+          <tr class="cat-row"><td colspan="4">Security & Compliance</td></tr>
+          <tr><td class="feature-name">E2E encryption</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Digital signature</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Watermarking</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Audit log</td><td class="check-n">—</td><td>90 days</td><td>1 year</td></tr>
+          <tr><td class="feature-name">Compliance templates</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+
+          <tr class="cat-row"><td colspan="4">Collaboration</td></tr>
+          <tr><td class="feature-name">Live multi-cursor editing</td><td class="check-n">—</td><td class="check-n">—</td><td class="check-p">Team</td></tr>
+          <tr><td class="feature-name">Study groups</td><td class="check-n">—</td><td>Up to 3</td><td>Unlimited</td></tr>
+          <tr><td class="feature-name">Classroom mode</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Team templates</td><td class="check-n">—</td><td class="check-n">—</td><td class="check-p">Team</td></tr>
+          <tr><td class="feature-name">@mention in comments</td><td class="check-n">—</td><td class="check-n">—</td><td class="check-p">Team</td></tr>
+
+          <tr class="cat-row"><td colspan="4">Analytics & Insights</td></tr>
+          <tr><td class="feature-name">Analytics dashboard</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">View counts</td><td class="check-y">✓</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">Referrer & country stats</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+
+          <tr class="cat-row"><td colspan="4">Support</td></tr>
+          <tr><td class="feature-name">Priority support</td><td class="check-n">—</td><td class="check-y">✓</td><td class="check-y">✓</td></tr>
+          <tr><td class="feature-name">SLA guarantee</td><td class="check-n">—</td><td class="check-n">—</td><td class="check-p">Team</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────── TECH STACK ─────────────────────── -->
+<section class="section" id="stack">
+  <div class="wrap">
+    <div class="section-eyebrow">tech stack</div>
+    <h2 class="section-title">BUILT<br>WITH <span class="hl-a">PRECISION</span></h2>
+    <p class="section-sub">Every technology chosen for a reason — performance, type safety, and developer experience.</p>
+
+    <div class="stack-grid reveal">
+
+      <div class="stack-card">
+        <div class="stack-icon si-ng">Ng</div>
+        <div class="stack-info">
+          <div class="stack-name">Angular <span class="stack-version">21.2.5</span></div>
+          <div class="stack-desc">Standalone components, Signals state, zoneless-ready, view transitions, lazy loading via loadComponent()</div>
+          <div class="stack-tags"><span class="stack-tag">Standalone</span><span class="stack-tag">Signals</span><span class="stack-tag">Zoneless</span></div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon si-ts">TS</div>
+        <div class="stack-info">
+          <div class="stack-name">TypeScript <span class="stack-version">5.6</span></div>
+          <div class="stack-desc">Strict mode enabled. All models fully typed — User, SnippetEntry, Plan, HistoryEntry, PaymentResult</div>
+          <div class="stack-tags"><span class="stack-tag">strict</span><span class="stack-tag">ES2022</span><span class="stack-tag">moduleResolution: bundler</span></div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon si-scss">SC</div>
+        <div class="stack-info">
+          <div class="stack-name">SCSS <span class="stack-version">CSS Custom Props</span></div>
+          <div class="stack-desc">Design token system with CSS variables. Component-scoped styles. No CSS-in-JS overhead.</div>
+          <div class="stack-tags"><span class="stack-tag">Design Tokens</span><span class="stack-tag">BEM-inspired</span></div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon si-mat">Mt</div>
+        <div class="stack-info">
+          <div class="stack-name">Angular Material <span class="stack-version">21</span></div>
+          <div class="stack-desc">CDK for overlays, drag-drop, virtual scroll. Material Icons Round. Dialogs and bottom sheets.</div>
+          <div class="stack-tags"><span class="stack-tag">CDK</span><span class="stack-tag">A11y</span><span class="stack-tag">Dialogs</span></div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon si-stripe">Str</div>
+        <div class="stack-info">
+          <div class="stack-name">Stripe.js <span class="stack-version">v3</span></div>
+          <div class="stack-desc">Client-side card tokenization via stripe.createToken(). PaymentService wraps token flow → backend /api/subscribe stub.</div>
+          <div class="stack-tags"><span class="stack-tag">Tokenization</span><span class="stack-tag">Card Detection</span><span class="stack-tag">PCI Safe</span></div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon si-rx">Rx</div>
+        <div class="stack-info">
+          <div class="stack-name">RxJS <span class="stack-version">7.8</span></div>
+          <div class="stack-desc">Used for debounceTime on slug availability check, HTTP requests, and async streams bridging to Signals.</div>
+          <div class="stack-tags"><span class="stack-tag">debounceTime</span><span class="stack-tag">switchMap</span><span class="stack-tag">takeUntilDestroyed</span></div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon si-pwa">PWA</div>
+        <div class="stack-info">
+          <div class="stack-name">@angular/pwa <span class="stack-version">Service Worker</span></div>
+          <div class="stack-desc">App shell caching, recent snippet caching, background sync queue, install prompt on mobile + desktop.</div>
+          <div class="stack-tags"><span class="stack-tag">Offline</span><span class="stack-tag">Background Sync</span><span class="stack-tag">Installable</span></div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon si-uuid">id</div>
+        <div class="stack-info">
+          <div class="stack-name">uuid <span class="stack-version">v9</span></div>
+          <div class="stack-desc">v4 UUID generation for snippet IDs, tab IDs, upload IDs, transaction IDs throughout all services.</div>
+          <div class="stack-tags"><span class="stack-tag">v4</span><span class="stack-tag">RFC 4122</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Architecture diagram -->
+    <div class="reveal">
+      <div style="font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;">// Architecture layers</div>
+      <div class="arch-diagram">
+        <div class="arch-section-label">UI Layer — Angular Standalone Components</div>
+        <div class="arch-row">
+          <div class="arch-group">
+            <div class="arch-box ab-blue">HeaderComponent</div>
+            <div class="arch-box ab-blue">EditorComponent</div>
+            <div class="arch-box ab-blue">UploaderComponent</div>
+            <div class="arch-box ab-blue">HistoryComponent</div>
+            <div class="arch-box ab-blue">PricingComponent</div>
+            <div class="arch-box ab-blue">CheckoutComponent</div>
+            <div class="arch-box ab-blue">ViewerComponent</div>
+            <div class="arch-box ab-blue">SlugPickerComponent</div>
+          </div>
+        </div>
+
+        <div class="arch-line"></div>
+        <div class="arch-section-label">Service Layer — Angular Signals</div>
+        <div class="arch-row">
+          <div class="arch-group">
+            <div class="arch-box ab-v">AuthService</div>
+            <div class="arch-box ab-v">SnippetService</div>
+            <div class="arch-box ab-v">HistoryService</div>
+            <div class="arch-box ab-v">SlugService</div>
+            <div class="arch-box ab-v">PaymentService</div>
+            <div class="arch-box ab-v">UploadService</div>
+            <div class="arch-box ab-v">ToastService</div>
+          </div>
+        </div>
+
+        <div class="arch-line"></div>
+        <div class="arch-section-label">Persistence Layer</div>
+        <div class="arch-row">
+          <div class="arch-group">
+            <div class="arch-box ab-t">localStorage: ss_user</div>
+            <div class="arch-box ab-t">localStorage: ss_snippets</div>
+            <div class="arch-box ab-t">localStorage: ss_history</div>
+            <div class="arch-box ab-t">localStorage: ss_slugs</div>
+            <div class="arch-box ab-t">localStorage: ss_uploads</div>
+            <div class="arch-box ab-t">localStorage: ss_transactions</div>
+          </div>
+        </div>
+
+        <div class="arch-line"></div>
+        <div class="arch-section-label">External Services (production)</div>
+        <div class="arch-row">
+          <div class="arch-group">
+            <div class="arch-box ab-a">Stripe.js v3</div>
+            <div class="arch-box ab-a">Pyodide (Python runtime)</div>
+            <div class="arch-box ab-a">Google Fonts</div>
+            <div class="arch-box ab-a">Material Icons CDN</div>
+          </div>
+        </div>
+
+        <div class="arch-line"></div>
+        <div class="arch-section-label">Backend Stubs (future / production)</div>
+        <div class="arch-row">
+          <div class="arch-group">
+            <div class="arch-box ab-c">PostgreSQL / Supabase</div>
+            <div class="arch-box ab-c">Redis (slug registry)</div>
+            <div class="arch-box ab-c">S3 / Cloudflare R2</div>
+            <div class="arch-box ab-c">Node.js /api/subscribe</div>
+            <div class="arch-box ab-c">Supabase Auth</div>
+            <div class="arch-box ab-c">ClickHouse (analytics)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Routes -->
+    <div style="margin-top: 52px;" class="reveal">
+      <div style="font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;">// Route definitions</div>
+      <div class="routes-grid">
+        <div class="route-row">
+          <div class="route-path">/</div>
+          <div class="route-info"><div class="route-component">EditorComponent</div><div class="route-desc">Main code editor, multi-tab, upload panel, share dialog</div></div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/upload</div>
+          <div class="route-info"><div class="route-component">UploaderComponent</div><div class="route-desc">Standalone document upload and management page</div></div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/history</div>
+          <div class="route-info"><div class="route-component">HistoryComponent</div><div class="route-desc">Snippet history with expiry, pin, search, tags</div></div>
+          <div class="route-guard">authGuard</div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/pricing</div>
+          <div class="route-info"><div class="route-component">PricingComponent</div><div class="route-desc">Plan listing, billing toggle, comparison table, FAQs</div></div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/checkout/:planId</div>
+          <div class="route-info"><div class="route-component">CheckoutComponent</div><div class="route-desc">Stripe payment form, card detection, success/fail states</div></div>
+          <div class="route-guard">authGuard</div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/s/:slug</div>
+          <div class="route-info"><div class="route-component">ViewerComponent</div><div class="route-desc">Public viewer — resolves custom slugs AND auto IDs</div></div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/view/:id</div>
+          <div class="route-info"><div class="route-component">ViewerComponent</div><div class="route-desc">Snippet viewer by UUID, password gate, file list</div></div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/c/:slug</div>
+          <div class="route-info"><div class="route-component">CollectionComponent</div><div class="route-desc">Public collection of snippets, embeddable widget</div></div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/classroom/:roomId</div>
+          <div class="route-info"><div class="route-component">ClassroomComponent</div><div class="route-desc">Teacher dashboard, student submissions, review panel</div></div>
+          <div class="route-guard">primeGuard</div>
+        </div>
+        <div class="route-row">
+          <div class="route-path">/analytics</div>
+          <div class="route-info"><div class="route-component">AnalyticsComponent</div><div class="route-desc">Account-level and per-snippet view analytics</div></div>
+          <div class="route-guard">primeGuard</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─────────────────────── FOOTER ─────────────────────── -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-logo">Share<span>Space</span></div>
+      <div class="footer-meta">Angular 21 · TypeScript 5.6 · Stripe · SCSS · PWA</div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#stack">Stack</a>
+      </div>
+      <div class="footer-meta" style="color:var(--wire);">Product One-Pager · March 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => observer.observe(el));
+
+// Billing toggle
+const opts = document.querySelectorAll('.billing-opt');
+const yearlyPrices = { prime: '$5.83', team: '$15.83' };
+const monthlyPrices = { prime: '$7', team: '$19' };
+opts.forEach((opt, idx) => {
+  opt.addEventListener('click', () => {
+    opts.forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

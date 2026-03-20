@@ -1,0 +1,44 @@
+// ── COLORS ──
+:root {
+  --ink: #08080e;
+  --ink2: #14141f;
+  --ink3: #1e1e2d;
+  --ink4: #2b2b40;
+  --wire: #32324a;
+  --muted: #5a5a7a;
+  --dim: #8888a8;
+  --paper: #e8e8f2;
+  --white: #f4f4fc;
+
+  // Accents
+  --v: #7b5ea7;        // violet (Prime)
+  --vo: #9b7cc7;
+  --teal: #2ec4a4;     // teal (Free / Success)
+  --amber: #f0a500;    // amber (Team / Warning)
+  --coral: #e8545a;    // coral (Error / High Alert)
+  --ice: #5bc8e8;
+
+  // Semantic
+  --accent: var(--v);
+  --success: var(--teal);
+  --warning: var(--amber);
+  --danger: var(--coral);
+}
+
+// ── FONTS ──
+$font-display: 'Bebas Neue', sans-serif;
+$font-ui: 'DM Sans', sans-serif;
+$font-mono: 'JetBrains Mono', monospace;
+
+// ── SIZING ──
+$header-height: 64px;
+$sidebar-width: 280px;
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+
+// ── TRANSITIONS ──
+$transition-fast: 0.15s ease;
+$transition-normal: 0.25s ease;
+$transition-slow: 0.4s ease;
