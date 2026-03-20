@@ -6,20 +6,13 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD4Se-odYCWderv8fPDvY2ylwMX_W3m00w",
-  authDomain: "sharespace-ai.firebaseapp.com",
-  projectId: "sharespace-ai",
-  storageBucket: "sharespace-ai.firebasestorage.app",
-  messagingSenderId: "225454938407",
-  appId: "1:225454938407:web:8a97d36b9bda016d2c3102"
-};
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     provideAuth(() => getAuth())

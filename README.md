@@ -67,6 +67,16 @@ This project uses Supabase for database and storage. To set up your backend:
 3.  **Environment Variables**: Update `src/app/services/supabase.client.ts` with your Supabase `URL` and `Anon Key`.
 
 
+### Environment Variables
+
+The project uses Angular's environment system located in `src/environments/`.
+
+- **Development**: Edit `src/environments/environment.ts`.
+- **Production**: Edit `src/environments/environment.prod.ts`.
+
+> [!NOTE]
+> Since Angular is a client-side framework, these values are baked into the build. To use different values on Vercel, you should update `environment.prod.ts` before pushing, or use a custom build script to generate this file from Vercel's Environment Variables.
+
 ## Deployment
 
 ### Deploying to Vercel
