@@ -50,6 +50,10 @@ body::before {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 32px;
+
+  @media (max-width: vars.$bp-md) {
+    padding: 0 20px;
+  }
 }
 
 .page-container {
@@ -60,4 +64,24 @@ body::before {
 @keyframes pageFadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE UTILITIES ── */
+.hide-mobile {
+  @media (max-width: vars.$bp-md) {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+  @media (max-width: vars.$bp-md) {
+    display: block !important;
+  }
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

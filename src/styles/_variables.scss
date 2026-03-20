@@ -30,6 +30,12 @@ $font-display: 'Bebas Neue', sans-serif;
 $font-ui: 'DM Sans', sans-serif;
 $font-mono: 'JetBrains Mono', monospace;
 
+// ── BREAKPOINTS ──
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
 // ── SIZING ──
 $header-height: 64px;
 $sidebar-width: 280px;

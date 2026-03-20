@@ -96,8 +96,13 @@ import { AuthService } from '../../services/auth.service';
     .hero {
       text-align: center;
       padding-top: 120px;
-      h1 { font-size: 80px; line-height: 0.9; margin-bottom: 24px; letter-spacing: -2px; }
-      .hero-sub { font-size: 20px; color: var(--dim); margin-bottom: 40px; }
+      h1 { 
+        font-size: clamp(40px, 8vw, 80px); 
+        line-height: 0.9; 
+        margin-bottom: 24px; 
+        letter-spacing: -2px; 
+      }
+      .hero-sub { font-size: clamp(16px, 3vw, 20px); color: var(--dim); margin-bottom: 40px; padding: 0 20px; }
       .accent { color: var(--v); text-shadow: 0 0 20px rgba(124, 58, 237, 0.4); }
     }
 
@@ -106,12 +111,18 @@ import { AuthService } from '../../services/auth.service';
       gap: 16px;
       justify-content: center;
       margin-bottom: 80px;
+      flex-wrap: wrap;
+      padding: 0 20px;
+
       .btn {
         padding: 16px 32px;
         border-radius: 12px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: auto;
+        min-width: 180px;
+        
         &.primary { 
           background: var(--v); color: white; 
           box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
@@ -121,6 +132,12 @@ import { AuthService } from '../../services/auth.service';
           border: 1px solid var(--wire); color: var(--paper); 
           &:hover { background: var(--ink2); }
         }
+      }
+
+      @media (max-width: 640px) {
+        flex-direction: column;
+        align-items: center;
+        .btn { width: 100%; max-width: 320px; }
       }
     }
 
@@ -144,9 +161,15 @@ import { AuthService } from '../../services/auth.service';
       border-top: 1px solid var(--wire);
       border-bottom: 1px solid var(--wire);
       padding: 40px 0;
-      .wrap { display: flex; justify-content: space-around; }
+      .wrap { 
+        display: flex; 
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 32px;
+      }
       .stat {
         text-align: center;
+        min-width: 120px;
         .val { display: block; font-size: 32px; font-weight: 700; color: var(--paper); font-family: 'Bebas Neue', sans-serif; }
         .lab { font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
       }
@@ -154,7 +177,7 @@ import { AuthService } from '../../services/auth.service';
 
     .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 32px;
       margin-top: 60px;
     }
@@ -175,16 +198,29 @@ import { AuthService } from '../../services/auth.service';
       border-top: 1px solid var(--wire);
       padding: 60px 0;
       margin-top: 80px;
-      .wrap { display: flex; justify-content: space-between; align-items: center; }
+      .wrap { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 40px;
+      }
       .logo { font-size: 24px; color: var(--paper); }
       .footer-links {
         display: flex; gap: 32px;
+        flex-wrap: wrap;
         a { color: var(--muted); text-decoration: none; &:hover { color: var(--paper); } }
+      }
+
+      @media (max-width: 640px) {
+        .wrap { flex-direction: column; text-align: center; }
+        .footer-links { justify-content: center; }
       }
     }
 
     @media (max-width: 768px) {
-      .hero h1 { font-size: 50px; }
+      .section { padding: 40px 0; }
+      .hero { padding-top: 80px; }
       .wrap { padding: 0 20px; }
     }
   `]

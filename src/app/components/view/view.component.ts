@@ -130,10 +130,12 @@ import { ToastService } from '../../services/toast.service';
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 24px;
       
       .meta {
-        h1 { font-size: 32px; margin-bottom: 12px; }
-        .badges { display: flex; gap: 8px; }
+        h1 { font-size: clamp(24px, 6vw, 32px); margin-bottom: 12px; }
+        .badges { display: flex; gap: 8px; flex-wrap: wrap; }
         .badge {
           font-family: 'JetBrains Mono', monospace;
           font-size: 11px;
@@ -146,16 +148,22 @@ import { ToastService } from '../../services/toast.service';
         }
       }
 
-      .actions { display: flex; gap: 12px; }
+      .actions { 
+        display: flex; 
+        gap: 12px;
+        width: 100%;
+        @media (min-width: 769px) { width: auto; }
+        .btn { flex: 1; text-align: center; }
+      }
     }
 
     .btn {
       background: var(--ink3);
       border: 1px solid var(--wire);
       color: var(--white);
-      padding: 10px 20px;
+      padding: 10px 16px;
       border-radius: 10px;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       transition: all 0.2s;
       &.primary { background: var(--v); border-color: var(--vo); }

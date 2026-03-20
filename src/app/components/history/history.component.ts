@@ -85,22 +85,29 @@ import { RouterLink } from '@angular/router';
       justify-content: space-between;
       align-items: center;
       margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 400px;
     }
 
     .search-box input {
       background: var(--ink3);
       border: 1px solid var(--wire);
       color: var(--white);
-      padding: 8px 16px;
+      padding: 10px 16px;
       border-radius: 8px;
-      width: 280px;
+      width: 100%;
       outline: none;
       &:focus { border-color: var(--v); }
     }
 
     .history-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 24px;
     }
 

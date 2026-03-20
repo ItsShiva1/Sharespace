@@ -54,24 +54,27 @@ import { RouterLink } from '@angular/router';
     </div>
   `,
   styles: [`
-    .pricing-page { padding-top: 80px; }
+    .pricing-page { padding-top: 40px; }
     .center { text-align: center; }
-    .pricing-header { margin-bottom: 60px; }
-    .pricing-header h1 { font-size: 64px; margin-bottom: 12px; }
+    .pricing-header { margin-bottom: 40px; padding: 0 20px; }
+    .pricing-header h1 { font-size: clamp(32px, 8vw, 64px); margin-bottom: 12px; }
 
     .pricing-grid {
       display: flex;
       justify-content: center;
       gap: 32px;
       margin-bottom: 60px;
+      flex-wrap: wrap;
+      padding: 0 20px;
     }
 
     .price-card {
       background: var(--ink2);
       border: 1px solid var(--wire);
       border-radius: var(--radius-lg, 24px);
-      padding: 40px;
-      width: 360px;
+      padding: 32px;
+      width: 100%;
+      max-width: 360px;
       display: flex;
       flex-direction: column;
       position: relative;

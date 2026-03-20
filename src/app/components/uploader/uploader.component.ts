@@ -65,21 +65,26 @@ import { RouterLink } from '@angular/router';
     :host { display: block; height: 100%; background: var(--ink); }
     
     .uploader-viewport {
-      padding: 48px;
+      padding: 24px;
       max-width: 800px;
       margin: 0 auto;
+      
+      @media (min-width: 769px) {
+        padding: 48px;
+      }
     }
 
     .header-strip {
-      margin-bottom: 40px;
-      h2 { font-size: 32px; letter-spacing: 2px; }
+      margin-bottom: 32px;
+      h2 { font-size: clamp(24px, 5vw, 32px); letter-spacing: 2px; }
+      p { font-size: 14px; }
     }
 
     .uploader-container {
       background: var(--ink2);
       border: 1px solid var(--wire);
       border-radius: 24px;
-      min-height: 400px;
+      min-height: 320px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -93,13 +98,13 @@ import { RouterLink } from '@angular/router';
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 40px;
+      padding: 32px 20px;
       background: rgba(10, 10, 11, 0.8);
       backdrop-filter: blur(12px);
 
-      .lock-icon { font-size: 48px; margin-bottom: 24px; }
-      h3 { font-size: 28px; margin-bottom: 12px; }
-      p { max-width: 300px; margin-bottom: 32px; line-height: 1.6; }
+      .lock-icon { font-size: 40px; margin-bottom: 16px; }
+      h3 { font-size: 24px; margin-bottom: 12px; }
+      p { max-width: 100%; margin-bottom: 24px; line-height: 1.6; font-size: 14px; }
     }
 
     .btn-prime {
@@ -117,7 +122,8 @@ import { RouterLink } from '@angular/router';
 
     .drop-zone {
       flex: 1;
-      margin: 24px;
+      margin: 16px;
+      @media (min-width: 769px) { margin: 24px; }
       border: 2px dashed var(--wire);
       border-radius: 16px;
       display: flex;
@@ -132,9 +138,10 @@ import { RouterLink } from '@angular/router';
 
     .dz-content {
       text-align: center;
-      .icon { font-size: 40px; margin-bottom: 16px; }
-      p { font-size: 18px; color: var(--paper); .highlight { color: var(--v); font-weight: 600; } }
-      .sub { font-size: 12px; color: var(--muted); margin-top: 8px; display: block; }
+      padding: 20px;
+      .icon { font-size: 32px; margin-bottom: 12px; }
+      p { font-size: 16px; color: var(--paper); .highlight { color: var(--v); font-weight: 600; } }
+      .sub { font-size: 11px; color: var(--muted); margin-top: 8px; display: block; }
     }
 
     .upload-list {

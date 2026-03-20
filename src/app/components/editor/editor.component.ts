@@ -30,11 +30,11 @@ import { keymap } from '@codemirror/view';
     <div class="editor-workspace">
       <!-- Toolbar -->
       <div class="toolbar">
-        <div class="tool-group">
+        <div class="tool-group main-tools">
           <input type="text" [value]="snippet.title()" (input)="onTitleChange($event)" class="title-input" placeholder="Untitled Snippet">
         </div>
         
-        <div class="tool-group">
+        <div class="tool-group action-tools">
           <select [value]="snippet.activeTab().language" (change)="onLanguageChange($event)" class="lang-select">
             <option value="javascript">JavaScript</option>
             <option value="typescript">TypeScript</option>
@@ -44,13 +44,12 @@ import { keymap } from '@codemirror/view';
             <option value="markdown">Markdown</option>
             <option value="json">JSON</option>
           </select>
-          <button class="btn format" (click)="formatCode()">Format</button>
-          <button class="btn preview-toggle" [class.active]="showPreview()" (click)="togglePreview()">Preview</button>
-        </div>
-
-        <div class="tool-group">
+          <button class="btn format hide-mobile" (click)="formatCode()">Format</button>
+          <button class="btn preview-toggle" [class.active]="showPreview()" (click)="togglePreview()">
+            {{ showPreview() ? 'Code' : 'Preview' }}
+          </button>
           <button class="btn share" (click)="saveSnippet()">
-            Save & Share
+            Save
           </button>
         </div>
       </div>
@@ -67,11 +66,14 @@ import { keymap } from '@codemirror/view';
       </div>
 
       <!-- Editor Container -->
-      <div class="editor-main" [class.split-view]="showPreview()">
-        <div #editorHost class="editor-host" [style.flex]="showPreview() ? '0 0 ' + editorWidth() + 'px' : '1'"></div>
+      <div class="editor-main" [class.split-view]="showPreview()" [class.mobile-preview]="showPreview()">
+        <div #editorHost class="editor-host" 
+             [class.hide-mobile]="showPreview()"
+             [style.flex]="(showPreview() && !isMobile()) ? '0 0 ' + editorWidth() + 'px' : '1'">
+        </div>
         
         @if (showPreview()) {
-          <ss-resizer (resize)="onResize($event)" />
+          <ss-resizer class="hide-mobile" (resize)="onResize($event)" />
           <div class="preview-pane">
             <div class="preview-header">LIVE PREVIEW</div>
             <div class="preview-content" [innerHTML]="previewContent()"></div>
@@ -80,7 +82,7 @@ import { keymap } from '@codemirror/view';
       </div>
 
       <!-- Status Bar -->
-      <div class="status-bar">
+      <div class="status-bar hide-mobile">
         <div class="status-left">
           <span class="stat">Lines: {{ lineCount() }}</span>
           <span class="stat">Chars: {{ snippet.totalChars() }}</span>
@@ -88,7 +90,6 @@ import { keymap } from '@codemirror/view';
         <div class="status-right">
           <span class="stat">{{ snippet.activeTab().language.toUpperCase() }}</span>
           <span class="stat">UTF-8</span>
-          <span class="stat">2 Spaces</span>
         </div>
       </div>
     </div>
@@ -98,25 +99,27 @@ import { keymap } from '@codemirror/view';
       display: flex;
       flex-direction: column;
       position: fixed;
-      inset: 64px 0 0 0; /* Align below header */
+      inset: 64px 0 0 0;
       background: var(--ink);
       z-index: 50;
     }
 
     .toolbar {
-      height: 54px;
-      padding: 0 20px;
+      min-height: 54px;
+      padding: 8px 16px;
       background: var(--ink2);
       border-bottom: 1px solid var(--wire);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .tool-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .title-input {
@@ -127,7 +130,7 @@ import { keymap } from '@codemirror/view';
       font-size: 16px;
       font-weight: 600;
       outline: none;
-      width: 300px;
+      width: clamp(150px, 30vw, 300px);
       &::placeholder { color: var(--muted); }
     }
 
@@ -166,6 +169,7 @@ import { keymap } from '@codemirror/view';
       gap: 4px;
       overflow-x: auto;
       border-bottom: 1px solid var(--wire);
+      &::-webkit-scrollbar { display: none; }
     }
 
     .tab {
@@ -182,13 +186,7 @@ import { keymap } from '@codemirror/view';
       font-size: 13px;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.2s, color 0.2s;
-
-      &:hover {
-        background: var(--ink3);
-        color: var(--paper);
-      }
-
+      
       &.active {
         background: var(--ink);
         color: var(--white);
@@ -197,52 +195,48 @@ import { keymap } from '@codemirror/view';
       }
 
       .tab-close {
-        background: none;
-        border: none;
-        color: var(--muted);
-        font-size: 16px;
-        line-height: 1;
-        padding: 0 4px;
-        cursor: pointer;
+        background: none; border: none; color: var(--muted);
+        font-size: 16px; line-height: 1; padding: 0 4px; cursor: pointer;
         &:hover { color: var(--coral); }
       }
     }
 
     .add-tab {
-      height: 24px;
-      width: 24px;
-      margin-bottom: 4px;
-      background: none;
-      border: 1px solid var(--wire);
-      border-radius: 4px;
-      color: var(--dim);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      &:hover { background: var(--ink3); color: var(--paper); }
+      height: 24px; min-width: 24px; margin-bottom: 4px;
+      background: none; border: 1px solid var(--wire); border-radius: 4px;
+      color: var(--dim); cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
 
     .editor-main {
       flex: 1;
       overflow: hidden;
       display: flex;
-      height: calc(100vh - 54px - 40px - 24px); // Correct height calculation
+      height: calc(100vh - 54px - 40px - 24px);
       
+      @media (max-width: 768px) {
+        height: calc(100dvh - 64px - 54px - 40px); // No status bar on mobile
+        flex-direction: column;
+      }
+
       &.split-view {
         .preview-pane { border-left: 1px solid var(--wire); }
+        @media (max-width: 768px) {
+          .preview-pane { border-left: none; width: 100% !important; flex: 1; }
+        }
       }
     }
 
     .editor-host {
       flex: 1;
       height: 100%;
-      
       ::ng-deep .cm-editor {
         height: 100%;
         outline: none;
         font-family: 'JetBrains Mono', monospace;
         font-size: 14px;
+      }
+      &.hide-mobile {
+        @media (max-width: 768px) { display: none !important; }
       }
     }
 
@@ -251,6 +245,7 @@ import { keymap } from '@codemirror/view';
       flex-direction: column;
       background: var(--ink);
       overflow: hidden;
+      flex: 1;
     }
 
     .preview-header {
@@ -268,15 +263,13 @@ import { keymap } from '@codemirror/view';
 
     .preview-content {
       flex: 1;
-      padding: 24px;
+      padding: 16px;
       overflow-y: auto;
       color: var(--paper);
-      
       ::ng-deep {
-        h1, h2, h3 { font-family: 'Bebas Neue', sans-serif; color: var(--white); margin-top: 1.5em; }
-        p { margin-bottom: 1em; }
-        pre { background: var(--ink2); padding: 16px; border-radius: 8px; border: 1px solid var(--wire); overflow-x: auto; }
-        code { font-family: 'JetBrains Mono', monospace; color: var(--v); }
+        h1, h2, h3 { font-family: 'Bebas Neue', sans-serif; color: var(--white); margin-top: 1.2em; }
+        p { margin-bottom: 0.8em; }
+        pre { background: var(--ink2); padding: 12px; border-radius: 8px; border: 1px solid var(--wire); overflow-x: auto; font-size: 13px; }
       }
     }
 
@@ -291,8 +284,11 @@ import { keymap } from '@codemirror/view';
       color: var(--muted);
       font-size: 11px;
       font-family: 'JetBrains Mono', monospace;
-
       .stat { margin-right: 16px; }
+    }
+
+    .hide-mobile {
+      @media (max-width: 768px) { display: none !important; }
     }
   `]
 })
@@ -308,6 +304,8 @@ export class EditorComponent {
   lineCount = signal(0);
   showPreview = signal(false);
   editorWidth = signal(window.innerWidth / 2);
+
+  isMobile = signal(window.innerWidth <= 768);
 
   previewContent = computed(() => {
     const active = this.snippet.activeTab();
@@ -351,6 +349,11 @@ export class EditorComponent {
       onCleanup(() => {
         this.editorView?.destroy();
       });
+    });
+
+    // Listen to resize
+    window.addEventListener('resize', () => {
+      this.isMobile.set(window.innerWidth <= 768);
     });
   }
 

@@ -94,6 +94,13 @@ import { RouterLink } from '@angular/router';
       background: var(--ink2);
       border: 1px solid var(--wire);
       border-radius: 24px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px;
+        gap: 20px;
+      }
     }
 
     .avatar-large {
@@ -103,18 +110,32 @@ import { RouterLink } from '@angular/router';
       background-size: cover;
       background-color: var(--ink3);
       border: 4px solid var(--wire);
+
+      @media (max-width: 768px) {
+        width: 80px;
+        height: 80px;
+      }
     }
 
     .user-info {
-      h1 { font-size: 48px; margin-bottom: 4px; }
-      p { margin-bottom: 16px; }
+      min-width: 0;
+      h1 { 
+        font-size: clamp(32px, 8vw, 48px); 
+        margin-bottom: 4px; 
+        overflow-wrap: break-word;
+      }
+      p { 
+        margin-bottom: 16px; 
+        font-size: 14px; 
+        overflow-wrap: break-word;
+      }
     }
 
     .badge {
       display: inline-block;
       padding: 4px 12px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: 1px;
       
@@ -124,15 +145,23 @@ import { RouterLink } from '@angular/router';
 
     .profile-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
     }
 
     .profile-card {
       background: var(--ink2);
       border: 1px solid var(--wire);
       border-radius: 20px;
-      padding: 32px;
+      padding: 24px;
+      
+      @media (min-width: 769px) {
+        padding: 32px;
+      }
       
       &.premium {
         background: linear-gradient(135deg, var(--ink2) 0%, rgba(123, 94, 167, 0.05) 100%);
