@@ -17,15 +17,30 @@ import { CommonModule } from '@angular/common';
         <nav class="main-nav">
           <a routerLink="/editor" routerLinkActive="active">Editor</a>
           <a routerLink="/history" routerLinkActive="active">History</a>
-          <a routerLink="/upload" routerLinkActive="active">Upload</a>
+          @if (auth.isLoggedIn() && !auth.user()?.isAnonymous) {
+            <a routerLink="/upload" routerLinkActive="active">Upload</a>
+          }
         </nav>
       </div>
 
       <div class="header-right">
+        @if (!auth.isLoggedIn() || auth.user()?.isAnonymous) {
+          <div class="slug-input-wrapper">
+            <span class="slug-prefix">@</span>
+            <input 
+              type="text" 
+              class="slug-input" 
+              placeholder="Enter slug for history..." 
+              [value]="auth.user()?.isAnonymous ? auth.user()?.id : ''"
+              (input)="onSlugChange($event)"
+            >
+          </div>
+        }
+
         @if (auth.isLoggedIn()) {
           @if (auth.isPrime()) {
             <div class="badge prime">PRIME USER</div>
-          } @else {
+          } @else if (!auth.user()?.isAnonymous) {
             <a routerLink="/pricing" class="badge-link">
               <div class="badge free">FREE TIER</div>
             </a>
@@ -194,10 +209,44 @@ import { CommonModule } from '@angular/common';
     white-space: nowrap;
       &:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.2); background: #f8f8f8; }
     }
+
+    .slug-input-wrapper {
+      display: flex;
+      align-items: center;
+      background: var(--ink3);
+      border: 1px solid var(--wire);
+      border-radius: 8px;
+      padding: 4px 12px;
+      gap: 4px;
+      transition: border-color 0.2s;
+      &:focus-within { border-color: var(--v); }
+    }
+
+    .slug-prefix {
+      color: var(--v);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .slug-input {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      width: 180px;
+      &::placeholder { color: var(--muted); font-size: 12px; }
+    }
   `]
 })
 export class HeaderComponent {
   auth = inject(AuthService);
+
+  onSlugChange(event: any) {
+    const slug = event.target.value;
+    this.auth.setSlug(slug);
+  }
 
   toggleMenu() {
     // To be implemented: dropdown menu

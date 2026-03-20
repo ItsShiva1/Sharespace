@@ -133,17 +133,43 @@ export class AuthService {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(googleUser));
       }
     } catch (err: any) {
-      // Firestore blocked (permission-denied) — still log in with Google data
-      console.warn('Firestore unavailable, using Google Auth data:', err.code || err);
       this._user.set(googleUser);
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(googleUser));
     }
 
     // Sync cloud history (best effort)
+    this.syncHistory();
+  }
+
+  setSlug(slug: string) {
+    if (!slug) {
+      if (this._user()?.isAnonymous) {
+        this._user.set(null);
+        localStorage.removeItem(this.STORAGE_KEY);
+      }
+      return;
+    }
+
+    const anonUser: User = {
+      id: slug,
+      name: `Guest (${slug})`,
+      email: '',
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(slug)}&background=7B5EA7&color=fff`,
+      tier: 'guest',
+      joinedAt: new Date(),
+      isAnonymous: true
+    };
+
+    this._user.set(anonUser);
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(anonUser));
+    this.syncHistory();
+  }
+
+  private async syncHistory() {
     try {
       const { HistoryService } = await import('./history.service');
       const historySvc = this.injector.get(HistoryService);
-      historySvc.setLoading(true); // Show spinner in history page
+      historySvc.setLoading(true);
       const { SupabaseService } = await import('./supabase.service');
       const supabaseSvc = this.injector.get(SupabaseService);
       const cloudEntries = await supabaseSvc.getHistoryForUser(this._user()!.id);

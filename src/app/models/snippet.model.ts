@@ -11,6 +11,7 @@ export interface User {
   planId?: PlanId;
   planExpiresAt?: Date | null;
   reservedSlugs?: string[];
+  isAnonymous?: boolean;
 }
 
 export interface FileTab {

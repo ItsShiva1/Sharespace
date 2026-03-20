@@ -19,7 +19,7 @@ import { RouterLink } from '@angular/router';
       </div>
 
       <div class="uploader-container">
-        @if (!auth.isLoggedIn()) {
+        @if (!auth.isLoggedIn() || auth.user()?.isAnonymous) {
           <!-- Login Gate -->
           <div class="prime-gate">
             <div class="lock-icon">🔒</div>
