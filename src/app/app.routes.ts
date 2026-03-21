@@ -23,6 +23,11 @@ export const routes: Routes = [
     title: 'ShareSpace — History'
   },
   {
+    path: 'history/:slug',
+    loadComponent: () => import('./components/history/history.component').then(m => m.HistoryComponent),
+    title: 'ShareSpace — Guest History'
+  },
+  {
     path: 'pricing',
     loadComponent: () => import('./components/pricing/pricing.component').then(m => m.PricingComponent),
     title: 'ShareSpace — Pricing'

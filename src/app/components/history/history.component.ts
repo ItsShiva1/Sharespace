@@ -4,19 +4,28 @@ import { HistoryService } from '../../services/history.service';
 import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../services/auth.service';
 import { HistoryEntry } from '../../models/snippet.model';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ConfirmService } from '../../services/confirm.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   template: `
     <div class="history-page wrap page-container">
       @if (!auth.isLoggedIn()) {
         <div class="empty-state">
           <p style="font-size:48px;margin-bottom:16px">🔒</p>
           <p class="mono muted">Sign in with Google to view your personal history.</p>
+          
+          <div class="guest-lookup">
+            <p class="mono dim" style="margin: 24px 0 12px">OR Access via Guest Slug</p>
+            <div class="lookup-field">
+              <input type="text" [(ngModel)]="guestSlug" placeholder="Enter your slug..." class="mono" (keyup.enter)="lookupGuest()">
+              <button (click)="lookupGuest()" class="lookup-btn">Go</button>
+            </div>
+          </div>
         </div>
       } @else {
         @if (historyService.loading()) {
@@ -189,6 +198,37 @@ import { ConfirmService } from '../../services/confirm.service';
     .stats { display: flex; flex-direction: column; text-align: right; gap: 2px; }
 
     .empty-state { text-align: center; padding: 100px 0; }
+    
+    .guest-lookup {
+      margin-top: 40px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .lookup-field {
+      display: flex;
+      background: var(--ink3);
+      border: 1px solid var(--ink4);
+      border-radius: 8px;
+      overflow: hidden;
+      input {
+        background: none;
+        border: none;
+        color: var(--v);
+        padding: 10px 14px;
+        flex: 1;
+        outline: none;
+        font-size: 14px;
+      }
+      .lookup-btn {
+        background: var(--p1);
+        border: none;
+        color: white;
+        padding: 0 16px;
+        cursor: pointer;
+        &:hover { background: var(--p1-h); }
+      }
+    }
   `]
 })
 export class HistoryComponent {
@@ -196,8 +236,19 @@ export class HistoryComponent {
   toast = inject(ToastService);
   auth = inject(AuthService);
   confirm = inject(ConfirmService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
   
   searchQuery = signal('');
+  guestSlug = '';
+
+  constructor() {
+    this.route.params.subscribe(params => {
+      if (params['slug']) {
+        this.auth.setSlug(params['slug']);
+      }
+    });
+  }
 
   filteredHistory = computed(() => {
     const query = this.searchQuery().toLowerCase();
@@ -233,6 +284,12 @@ export class HistoryComponent {
       } catch (e) {
         this.toast.error('Failed to remove snippet from cloud history');
       }
+    }
+  }
+
+  lookupGuest() {
+    if (this.guestSlug.trim()) {
+      this.router.navigate(['/history', this.guestSlug.trim().toLowerCase()]);
     }
   }
 

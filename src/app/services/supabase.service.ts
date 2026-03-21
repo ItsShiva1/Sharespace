@@ -124,7 +124,8 @@ export class SupabaseService {
       .order('created_at', { ascending: false })
       .limit(100);
 
-    if (error || !data) return [];
+    if (error) throw error;
+    if (!data) return [];
 
     return data.map(d => ({
       id: d['id'],
