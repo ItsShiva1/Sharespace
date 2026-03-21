@@ -10,10 +10,12 @@ export class SnippetService {
   private _tabs = signal<FileTab[]>([this.createDefaultTab()]);
   private _uploads = signal<UploadedFile[]>([]);
   private _title = signal<string>('Untitled Snippet');
+  private _slug = signal<string>('');
   
   tabs = this._tabs.asReadonly();
   uploads = this._uploads.asReadonly();
   title = this._title.asReadonly();
+  slug = this._slug.asReadonly();
 
   activeTab = computed(() => this._tabs().find(t => t.isActive) || this._tabs()[0]);
   
@@ -83,6 +85,10 @@ export class SnippetService {
     this._title.set(title);
   }
 
+  setSlug(slug: string) {
+    this._slug.set(slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-'));
+  }
+
   async saveToCloud() {
     const id = crypto.randomUUID();
     const activeTab = this.activeTab();
@@ -97,11 +103,12 @@ export class SnippetService {
       updatedAt: new Date(),
       expiresAt: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
       lang: activeTab.language,
+      slug: this._slug() || undefined,
       isPublic: true,
       isReadOnly: false,
       hasPassword: false,
       views: 0,
-      shareUrl: `${window.location.origin}/view/${id}`,
+      shareUrl: `${window.location.origin}/view/${this._slug() || id}`,
       tags: [],
       version: 1,
       encryptionEnabled: false
@@ -113,6 +120,7 @@ export class SnippetService {
       snippetId: id,
       title: snippet.title,
       lang: snippet.lang,
+      slug: snippet.slug,
       preview: activeTab.content.substring(0, 150),
       createdAt: snippet.createdAt,
       expiresAt: snippet.expiresAt,
@@ -140,6 +148,21 @@ export class SnippetService {
     }
 
     return history;
+  }
+
+  loadSnippet(snippet: SnippetEntry) {
+    this._tabs.set(snippet.tabs.map(t => ({ ...t }))); // Deep copy tabs
+    this._uploads.set(snippet.uploads.map(u => ({ ...u }))); // Deep copy uploads
+    this._title.set(snippet.title);
+    this._slug.set(snippet.slug || '');
+    
+    // Ensure one tab is active
+    if (this._tabs().length > 0 && !this._tabs().find(t => t.isActive)) {
+      this._tabs.update(tabs => {
+        tabs[0].isActive = true;
+        return [...tabs];
+      });
+    }
   }
 
   private createDefaultTab(): FileTab {

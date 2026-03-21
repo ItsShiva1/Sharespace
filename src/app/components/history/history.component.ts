@@ -5,6 +5,7 @@ import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../services/auth.service';
 import { HistoryEntry } from '../../models/snippet.model';
 import { RouterLink } from '@angular/router';
+import { ConfirmService } from '../../services/confirm.service';
 
 @Component({
   selector: 'app-history',
@@ -194,6 +195,7 @@ export class HistoryComponent {
   historyService = inject(HistoryService);
   toast = inject(ToastService);
   auth = inject(AuthService);
+  confirm = inject(ConfirmService);
   
   searchQuery = signal('');
 
@@ -203,7 +205,8 @@ export class HistoryComponent {
     if (!query) return all;
     return all.filter(e => 
       e.title.toLowerCase().includes(query) || 
-      e.lang.toLowerCase().includes(query)
+      e.lang.toLowerCase().includes(query) ||
+      (e.slug && e.slug.toLowerCase().includes(query))
     );
   });
 
@@ -215,9 +218,22 @@ export class HistoryComponent {
     this.historyService.togglePin(id);
   }
 
-  deleteEntry(id: string) {
-    this.historyService.removeEntry(id);
-    this.toast.success('Snippet removed from history');
+  async deleteEntry(id: string) {
+    const confirmed = await this.confirm.confirm({
+      title: 'Delete Snippet',
+      message: 'Are you sure you want to remove this snippet from your history? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Keep'
+    });
+
+    if (confirmed) {
+      try {
+        await this.historyService.removeEntry(id);
+        this.toast.success('Snippet removed from history');
+      } catch (e) {
+        this.toast.error('Failed to remove snippet from cloud history');
+      }
+    }
   }
 
   isExpiringSoon(date: Date): boolean {

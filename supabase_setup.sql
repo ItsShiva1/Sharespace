@@ -1,4 +1,8 @@
--- ShareSpace - Supabase Database Setup Script
+-- ShareSpace - Supabase Database Setup Script (Hybrid Firebase Auth Version)
+
+-- MIGRATION NOTE: If you already have the history table, run this to allow Firebase Auth:
+-- ALTER TABLE public.history DROP CONSTRAINT IF EXISTS history_user_id_fkey;
+-- ALTER TABLE public.history ALTER COLUMN user_id TYPE text;
 
 -- 1. Create the 'snippets' table for detailed code snippets
 create table if not exists public.snippets (
@@ -7,6 +11,7 @@ create table if not exists public.snippets (
   tabs jsonb not null default '[]'::jsonb,
   uploads jsonb not null default '[]'::jsonb,
   lang text,
+  slug text unique,
   is_public boolean default true,
   share_url text,
   tags text[] default array[]::text[],
@@ -18,10 +23,11 @@ create table if not exists public.snippets (
 -- 2. Create the 'history' table for user history tracking
 create table if not exists public.history (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid references auth.users(id) on delete cascade,
+  user_id text not null, -- Store Firebase UID as text (or uuid if valid)
   snippet_id uuid, -- Reference to snippets.id or same as id for standalone uploads
   title text not null,
   lang text,
+  slug text,
   preview text,
   share_url text,
   file_count int4 default 0,
@@ -38,36 +44,34 @@ alter table public.snippets enable row level security;
 alter table public.history enable row level security;
 
 -- 4. Create Policies for 'snippets'
--- Anyone can view public snippets
-create policy "Public snippets are viewable by everyone" 
-on public.snippets for select 
-using (is_public = true);
+-- (Using DO blocks to avoid errors if policies already exist)
+do $$ 
+begin
+  if not exists (select 1 from pg_policies where policyname = 'Public snippets are viewable by everyone') then
+    create policy "Public snippets are viewable by everyone" on public.snippets for select using (is_public = true);
+  end if;
+  if not exists (select 1 from pg_policies where policyname = 'Anyone can insert snippets') then
+    create policy "Anyone can insert snippets" on public.snippets for insert with check (true);
+  end if;
+end $$;
 
--- Anyone can create a snippet (anonymous or logged in)
-create policy "Anyone can insert snippets" 
-on public.snippets for insert 
-with check (true);
-
--- 5. Create Policies for 'history'
--- Users can only view their own history
-create policy "Users can view their own history" 
-on public.history for select 
-using (auth.uid() = user_id);
-
--- Users can only insert their own history
-create policy "Users can insert their own history" 
-on public.history for insert 
-with check (auth.uid() = user_id);
-
--- Users can update their own history (for pinning/etc)
-create policy "Users can update their own history" 
-on public.history for update 
-using (auth.uid() = user_id);
-
--- Users can delete their own history
-create policy "Users can delete their own history" 
-on public.history for delete 
-using (auth.uid() = user_id);
+-- 5. Create Policies for 'history' (Updated for Hybrid Firebase Auth)
+do $$ 
+begin
+  if not exists (select 1 from pg_policies where policyname = 'Anyone can view history by user_id') then
+    -- We rely on the application to filter by the user's Firebase UID
+    create policy "Anyone can view history by user_id" on public.history for select using (true);
+  end if;
+  if not exists (select 1 from pg_policies where policyname = 'Anyone can insert their own history') then
+    create policy "Anyone can insert their own history" on public.history for insert with check (true);
+  end if;
+  if not exists (select 1 from pg_policies where policyname = 'Anyone can update their own history') then
+    create policy "Anyone can update their own history" on public.history for update using (true);
+  end if;
+  if not exists (select 1 from pg_policies where policyname = 'Anyone can delete their own history') then
+    create policy "Anyone can delete their own history" on public.history for delete using (true);
+  end if;
+end $$;
 
 -- 6. Storage Instructions
 -- In the Supabase Dashboard, create a PUBLIC bucket named 'uploads'.

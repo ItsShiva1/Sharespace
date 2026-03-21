@@ -1,5 +1,6 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HistoryEntry } from '../models/snippet.model';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ export class HistoryService {
   private _history = signal<HistoryEntry[]>([]);
   private _loading = signal<boolean>(false);
 
+  private supabase = inject(SupabaseService);
+
   history = this._history.asReadonly();
   loading = this._loading.asReadonly();
   pinnedCount = computed(() => this._history().filter(h => h.isPinned).length);
@@ -17,8 +20,20 @@ export class HistoryService {
     this._history.update(h => [entry, ...h.filter(e => e.id !== entry.id)]);
   }
 
-  removeEntry(id: string) {
+  async removeEntry(id: string) {
+    const previousHistory = this._history();
+    // Optimistic UI update
     this._history.update(h => h.filter(e => e.id !== id));
+    
+    // Perist in cloud
+    try {
+      await this.supabase.deleteHistoryEntry(id);
+    } catch (e) {
+      console.error('Failed to delete history entry from Supabase:', e);
+      // Revert on failure
+      this._history.set(previousHistory);
+      throw e; // Let the caller handle it (e.g., show toast)
+    }
   }
 
   togglePin(id: string) {
