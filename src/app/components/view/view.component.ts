@@ -1,7 +1,8 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
+import { SnippetService } from '../../services/snippet.service';
 import { SnippetEntry } from '../../models/snippet.model';
 import { ToastService } from '../../services/toast.service';
 
@@ -35,8 +36,9 @@ import { ToastService } from '../../services/toast.service';
               </div>
             </div>
             <div class="actions">
+              <button class="btn" (click)="copyCode()">Copy Code</button>
               <button class="btn" (click)="copyLink()">Copy Share URL</button>
-              <button class="btn primary" routerLink="/editor">Fork & Edit</button>
+              <button class="btn primary" (click)="forkSnippet()">Fork & Edit</button>
             </div>
           </header>
 
@@ -310,7 +312,9 @@ import { ToastService } from '../../services/toast.service';
 })
 export class ViewComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private supabase = inject(SupabaseService);
+  private snippetService = inject(SnippetService);
   private toast = inject(ToastService);
 
   snippet = signal<SnippetEntry | null>(null);
@@ -396,6 +400,25 @@ export class ViewComponent implements OnInit {
     const url = window.location.href;
     navigator.clipboard.writeText(url);
     this.toast.success('Share link copied to clipboard!');
+  }
+
+  copyCode() {
+    const content = this.activeTabContent();
+    if (content) {
+      navigator.clipboard.writeText(content);
+      this.toast.success('Code copied to clipboard!');
+    } else {
+      this.toast.warning('No code to copy');
+    }
+  }
+
+  forkSnippet() {
+    const s = this.snippet();
+    if (s) {
+      this.snippetService.loadSnippet(s);
+      this.router.navigate(['/editor']);
+      this.toast.success('Snippet loaded into editor!');
+    }
   }
 
   isImage(type: string): boolean {

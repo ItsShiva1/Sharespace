@@ -1,5 +1,6 @@
 import { Component, inject, viewChild, ElementRef, effect, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { SnippetService } from '../../services/snippet.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
@@ -32,6 +33,8 @@ import { keymap } from '@codemirror/view';
       <div class="toolbar">
         <div class="tool-group main-tools">
           <input type="text" [value]="snippet.title()" (input)="onTitleChange($event)" class="title-input" placeholder="Untitled Snippet">
+          <span class="slug-prefix mono">/</span>
+          <input type="text" [value]="snippet.slug()" (input)="onSlugChange($event)" class="slug-input mono" placeholder="custom-slug">
         </div>
         
         <div class="tool-group action-tools">
@@ -44,6 +47,7 @@ import { keymap } from '@codemirror/view';
             <option value="markdown">Markdown</option>
             <option value="json">JSON</option>
           </select>
+          <button class="btn hide-mobile" (click)="copyActiveTabCode()">Copy</button>
           <button class="btn format hide-mobile" (click)="formatCode()">Format</button>
           <button class="btn preview-toggle" [class.active]="showPreview()" (click)="togglePreview()">
             {{ showPreview() ? 'Code' : 'Preview' }}
@@ -131,6 +135,18 @@ import { keymap } from '@codemirror/view';
       font-weight: 600;
       outline: none;
       width: clamp(150px, 30vw, 300px);
+      &::placeholder { color: var(--muted); }
+    }
+    
+    .slug-prefix { color: var(--dim); margin-left: 12px; font-size: 14px; }
+    .slug-input {
+      background: none;
+      border: none;
+      color: var(--v);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      width: 150px;
       &::placeholder { color: var(--muted); }
     }
 
@@ -293,9 +309,10 @@ import { keymap } from '@codemirror/view';
   `]
 })
 export class EditorComponent {
-  snippet = inject(SnippetService);
-  toast = inject(ToastService);
-  history = inject(HistoryService);
+  protected snippet = inject(SnippetService);
+  protected toast = inject(ToastService);
+  protected history = inject(HistoryService);
+  protected router = inject(Router);
   editorHost = viewChild<ElementRef>('editorHost');
   
   private editorView?: EditorView;
@@ -362,6 +379,11 @@ export class EditorComponent {
     this.snippet.setTitle(val);
   }
 
+  onSlugChange(e: Event) {
+    const val = (e.target as HTMLInputElement).value;
+    this.snippet.setSlug(val);
+  }
+
   onLanguageChange(e: Event) {
     const val = (e.target as HTMLSelectElement).value;
     const activeTabId = this.snippet.activeTab().id;
@@ -388,6 +410,16 @@ export class EditorComponent {
     setTimeout(() => this.toast.success('Formatted!'), 500);
   }
 
+  copyActiveTabCode() {
+    const code = this.snippet.activeTab().content;
+    if (code) {
+      navigator.clipboard.writeText(code);
+      this.toast.success('Code copied to clipboard!');
+    } else {
+      this.toast.warning('Editor is empty');
+    }
+  }
+
   async saveSnippet() {
     if (this.snippet.totalChars() === 0) {
       this.toast.warning('Cannot save an empty snippet');
@@ -399,7 +431,10 @@ export class EditorComponent {
     try {
       const entry = await this.snippet.saveToCloud();
       this.history.addEntry(entry);
-      this.toast.success(`Saved! View at /view/${entry.snippetId}`);
+      const shareId = entry.slug || entry.snippetId;
+      this.toast.success(`Saved! View at /view/${shareId}`);
+      // Optionally navigate
+      this.router.navigate(['/view', shareId]);
     } catch (e) {
       this.toast.error('Failed to save snippet');
       console.error(e);

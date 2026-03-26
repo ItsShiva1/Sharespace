@@ -2,11 +2,12 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { ConfirmComponent } from './components/shared/confirm/confirm.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, ToastComponent],
+  imports: [RouterOutlet, HeaderComponent, ToastComponent, ConfirmComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <div class="app-container">
@@ -17,6 +18,7 @@ import { ToastComponent } from './components/toast/toast.component';
       </main>
 
       <app-toast></app-toast>
+      <app-confirm></app-confirm>
     </div>
   `,
   styles: [`
